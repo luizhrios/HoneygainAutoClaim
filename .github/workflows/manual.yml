@@ -11,9 +11,9 @@ jobs:
         shell: bash
         run: |
           if [ "${{ secrets.JWT_TOKEN }}" != '' ]; then
-            echo 1 >> $GITHUB_OUTPUT;
+            echo "1" >> $GITHUB_OUTPUT;
           else
-            echo 0 >> $GITHUB_OUTPUT;
+            echo "0" >> $GITHUB_OUTPUT;
           fi
 
       - uses: actions/checkout@v4
