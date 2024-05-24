@@ -1,9 +1,9 @@
-name: Daily claim
+name: Manual claim
 on:
   workflow_dispatch:
 
 jobs:
-  Daily:
+  Manual:
     runs-on: ubuntu-latest
     steps:
       - name: Check for JWT Secret
