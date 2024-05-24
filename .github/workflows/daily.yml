@@ -1,0 +1,28 @@
+name: Daily claim
+on:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  Daily:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run HoneygainPot with IsJWT Secret
+        if: ${{ secrets.JWT_TOKEN != '' }}
+        run: python main.py
+        env:
+          MAIL: ${{ secrets.MAIL }}
+          PASS: ${{ secrets.PASS }}
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+          IsJWT: 1
+
+      - uses: actions/checkout@v4
+      - name: Run HoneygainPot without IsJWT Secret
+        if: ${{ secrets.JWT_TOKEN == '' }}
+        run: python main.py
+        env:
+          MAIL: ${{ secrets.MAIL }}
+          PASS: ${{ secrets.PASS }}
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+          IsJWT: 0
