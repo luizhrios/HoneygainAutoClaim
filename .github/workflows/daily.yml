@@ -7,22 +7,21 @@ jobs:
   Daily:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Run HoneygainPot with IsJWT Secret
-        if: ${{ secrets.JWT_TOKEN != '' }}
-        run: python main.py
-        env:
-          MAIL: ${{ secrets.MAIL }}
-          PASS: ${{ secrets.PASS }}
-          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
-          IsJWT: 1
+      - name: Check for JWT Secret
+        id: IsJWT
+        shell: bash
+        run: |
+          if [ "${{ secrets.JWT_TOKEN }}" != '' ]; then
+            echo 1 >> $GITHUB_OUTPUT;
+          else
+            echo 0 >> $GITHUB_OUTPUT;
+          fi
 
       - uses: actions/checkout@v4
-      - name: Run HoneygainPot without IsJWT Secret
-        if: ${{ secrets.JWT_TOKEN == '' }}
+      - name: Run HoneygainPot
         run: python main.py
         env:
           MAIL: ${{ secrets.MAIL }}
           PASS: ${{ secrets.PASS }}
           JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
-          IsJWT: 0
+          IsJWT: ${{ steps.IsJWT.outputs }}
